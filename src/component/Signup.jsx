@@ -4,9 +4,24 @@ import { useUserAuth } from "../context/UserAuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [password, setPassword] = useState("");
+  const [use, setuse] = useState({
+    ename: "",
+    pname: "",
+  });
+
+  const textchange = (e) => {
+    let inputvalue = e.target.value;
+    let inputname = e.target.name;
+
+    setuse((e) => {
+      return {
+        ...e,
+        [inputname]: inputvalue,
+      };
+    });
+  };
+
   const { signUp } = useUserAuth();
   const navigate = useNavigate();
 
@@ -14,8 +29,8 @@ const Signup = () => {
     e.preventDefault();
     setError("");
     try {
-      await signUp(email, password);
-      navigate('/')
+      await signUp(use.ename, use.pname);
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }
@@ -24,7 +39,7 @@ const Signup = () => {
     <>
       <div className="row mb-5">
         <div className="col mx-auto">
-        {error && <h2 style={{color:"red"}}>{error}</h2>}
+          {error && <h2 style={{ color: "red" }}>{error}</h2>}
           <form
             className="d-flex align-items-center flex-column mb-5"
             onSubmit={handleSubmit}
@@ -34,7 +49,9 @@ const Signup = () => {
                 type="email"
                 id="form2Example1"
                 className="form-control"
-                onChange={(e) => setEmail(e.target.value)}
+                name="ename"
+                onChange={textchange}
+                value={use.ename}
               />
               <label className="form-label" for="form2Example1">
                 Email address
@@ -46,7 +63,9 @@ const Signup = () => {
                 type="password"
                 id="form2Example2"
                 className="form-control"
-                onChange={(e) => setPassword(e.target.value)}
+                name="pname"
+                onChange={textchange}
+                value={use.pname}
               />
               <label className="form-label" for="form2Example2">
                 Password
@@ -57,7 +76,6 @@ const Signup = () => {
               Sign up
             </button>
           </form>
-          
         </div>
       </div>
     </>
