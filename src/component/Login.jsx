@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import GoogleButton from "react-google-button";
-import { AuthErrorCodes } from "firebase/auth";
+// import GitHubButton from "react-github-button";
+// import { AuthErrorCodes } from "firebase/auth";
 
 import { useUserAuth } from "../context/UserAuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ const Login = () => {
       };
     });
   };
-  const { logIn, googleSignIn } = useUserAuth();
+  const { logIn, googleSignIn, githubSignIN } = useUserAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -40,6 +41,16 @@ const Login = () => {
     e.preventDefault();
     try {
       await googleSignIn();
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handlegithub = async (e) => {
+    e.preventDefault();
+    try {
+      await githubSignIN();
       navigate("/home");
     } catch (err) {
       setError(err.message);
@@ -93,6 +104,7 @@ const Login = () => {
               <p>or sign up with:</p>
 
               <GoogleButton onClick={handlegoogle} />
+              
             </div>
           </form>
         </div>
